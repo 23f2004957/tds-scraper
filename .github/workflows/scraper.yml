@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Setup Node.js for YOUR_EMAIL@gmail.com
+      - name: Setup Node.js for 23f2004957@ds.study.iitm.ac.in        
         uses: actions/setup-node@v4
         with:
           node-version: 20
