@@ -1,20 +1,26 @@
+name: "TDS Table Sums"
 
-name: TDS Table Scraper
-on: [workflow_dispatch]
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    
-    # SIMPLIFIED - No setup-node action
-    - name: "23f2004957@ds.study.iitm.ac.in - Install Node & Playwright"
-      run: |
-        npm install playwright@1.44.0
-        npx playwright install --with-deps
-        node --version
-        ls -la
-    
-    - name: "23f2004957@ds.study.iitm.ac.in - Run scraper"
-      run: node scraper.js
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js for YOUR_EMAIL@gmail.com
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
+      - name: Install packages
+        run: npm ci
+      
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      
+      - name: Scrape TDS tables and sum numbers
+        run: node scrape.js
