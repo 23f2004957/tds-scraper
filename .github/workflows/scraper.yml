@@ -9,16 +9,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: "23f2004957@ds.study.iitm.ac.in - Setup Node"
+    - name: "23f2004957@ds.study.iitm.ac.in - Setup Node.js"
       uses: actions/setup-node@v4
       with:
         node-version: '20'
     
-    - name: "23f2004957@ds.study.iitm.ac.in - Install deps"
+    - name: "23f2004957@ds.study.iitm.ac.in - Install packages"
       run: npm ci
     
-    - name: "23f2004957@ds.study.iitm.ac.in - Install Playwright"
+    - name: "23f2004957@ds.study.iitm.ac.in - Install Playwright browsers"
       run: npx playwright install --with-deps
     
-    - name: "23f2004957@ds.study.iitm.ac.in - Scrape Tables"
+    - name: "23f2004957@ds.study.iitm.ac.in - Run table scraper"
       run: node scraper.js
