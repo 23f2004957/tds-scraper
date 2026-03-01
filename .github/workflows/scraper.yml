@@ -1,0 +1,24 @@
+name: TDS Table Scraper
+on: [workflow_dispatch]
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: "23f2004957@ds.study.iitm.ac.in - Setup Node"
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: "23f2004957@ds.study.iitm.ac.in - Install deps"
+      run: npm ci
+    
+    - name: "23f2004957@ds.study.iitm.ac.in - Install Playwright"
+      run: npx playwright install --with-deps
+    
+    - name: "23f2004957@ds.study.iitm.ac.in - Scrape Tables"
+      run: node scraper.js
