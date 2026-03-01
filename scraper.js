@@ -20,24 +20,26 @@ const { chromium } = require('playwright');
   let grandTotal = 0;
   
   for (let i = 0; i < urls.length; i++) {
-    console.log(`📱 Visiting page ${i+1}/10`);
+    console.log(`\n📊 Processing Seed ${35+i}: ${urls[i]}`);
     await page.goto(urls[i], { waitUntil: 'networkidle' });
     
-    // Find ALL numbers in ALL table cells
+    // Extract ALL numbers from table cells
     const numbers = await page.evaluate(() => {
       const nums = [];
+      // Target all table cells containing numbers
       document.querySelectorAll('td, th').forEach(cell => {
-        const num = parseFloat(cell.textContent);
+        const text = cell.textContent.trim();
+        const num = parseFloat(text);
         if (!isNaN(num)) nums.push(num);
       });
       return nums;
     });
     
-    const pageTotal = numbers.reduce((sum, n) => sum + n, 0);
-    grandTotal += pageTotal;
-    console.log(`✅ Page ${i+1}: ${numbers.length} numbers = ${pageTotal.toFixed(2)}`);
+    const pageSum = numbers.reduce((a, b) => a + b, 0);
+    console.log(`✅ Found ${numbers.length} numbers. Page sum: ${pageSum.toLocaleString()}`);
+    grandTotal += pageSum;
   }
   
-  console.log(`🎯 GRAND TOTAL FROM ALL TABLES: ${grandTotal.toFixed(2)}`);
+  console.log(`\n🎉 GRAND TOTAL FROM ALL 10 SEED PAGES: ${grandTotal.toLocaleString()}`);
   await browser.close();
 })();
