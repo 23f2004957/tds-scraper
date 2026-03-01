@@ -1,7 +1,5 @@
 name: TDS Table Scraper
 on: [workflow_dispatch]
-permissions:
-  contents: write
 
 jobs:
   scrape:
@@ -9,16 +7,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: "23f2004957@ds.study.iitm.ac.in - Setup Node.js"
+    - name: "23f2004957@ds.study.iitm.ac.in - Setup Node"
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: 20
+        cache: 'npm'
+    
+    - name: "23f2004957@ds.study.iitm.ac.in - List files"
+      run: ls -la
     
     - name: "23f2004957@ds.study.iitm.ac.in - Install packages"
-      run: npm ci
+      run: npm install
     
-    - name: "23f2004957@ds.study.iitm.ac.in - Install Playwright browsers"
+    - name: "23f2004957@ds.study.iitm.ac.in - Install Playwright"
       run: npx playwright install --with-deps
     
-    - name: "23f2004957@ds.study.iitm.ac.in - Run table scraper"
+    - name: "23f2004957@ds.study.iitm.ac.in - Run scraper"
       run: node scraper.js
