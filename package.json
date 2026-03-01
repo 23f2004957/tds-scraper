@@ -1,5 +1,14 @@
 {
   "name": "tds-scraper",
   "version": "1.0.0",
-  "dependencies": {}
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  },
+  "author": "",
+  "license": "ISC"
 }
