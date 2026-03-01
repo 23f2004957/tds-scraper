@@ -1,10 +1,10 @@
 const { chromium } = require('playwright');
 
 (async () => {
-  console.log("🚀 Starting table scraper...");
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
   
-  // 10 websites with tables
-  const websites = [
+  const urls = [
     'https://sanand0.github.io/tdsdata/js_table/?seed=35',
     'https://sanand0.github.io/tdsdata/js_table/?seed=36',
     'https://sanand0.github.io/tdsdata/js_table/?seed=37',
@@ -17,35 +17,27 @@ const { chromium } = require('playwright');
     'https://sanand0.github.io/tdsdata/js_table/?seed=44'
   ];
   
-  let allNumbersSum = 0;
+  let grandTotal = 0;
   
-  // Visit each website
-  for (let pageNum = 0; pageNum < websites.length; pageNum++) {
-    console.log(`📱 Visiting page ${pageNum + 1}/10`);
+  for (let i = 0; i < urls.length; i++) {
+    console.log(`📱 Visiting page ${i+1}/10`);
+    await page.goto(urls[i], { waitUntil: 'networkidle' });
     
-    const browser = await chromium.launch();
-    const browserTab = await browser.newPage();
-    await browserTab.goto(websites[pageNum]);
-    
-    // FIND NUMBERS IN TABLES (magic part!)
-    const pageNumbers = await browserTab.evaluate(() => {
-      const numbers = [];
-      // Look in ALL table cells
+    // Find ALL numbers in ALL table cells
+    const numbers = await page.evaluate(() => {
+      const nums = [];
       document.querySelectorAll('td, th').forEach(cell => {
-        const cellText = cell.textContent.trim();
-        const number = parseFloat(cellText);
-        if (!isNaN(number)) numbers.push(number);
+        const num = parseFloat(cell.textContent);
+        if (!isNaN(num)) nums.push(num);
       });
-      return numbers;
+      return nums;
     });
     
-    // Add up this page's numbers
-    const thisPageTotal = pageNumbers.reduce((sum, num) => sum + num, 0);
-    allNumbersSum += thisPageTotal;
-    
-    console.log(`✅ Page ${pageNum + 1}: ${pageNumbers.length} numbers = ${thisPageTotal.toFixed(2)}`);
-    await browser.close();
+    const pageTotal = numbers.reduce((sum, n) => sum + n, 0);
+    grandTotal += pageTotal;
+    console.log(`✅ Page ${i+1}: ${numbers.length} numbers = ${pageTotal.toFixed(2)}`);
   }
   
-  console.log(`🎯 FINAL ANSWER - TOTAL FROM ALL TABLES: ${allNumbersSum.toFixed(2)}`);
+  console.log(`🎯 GRAND TOTAL FROM ALL TABLES: ${grandTotal.toFixed(2)}`);
+  await browser.close();
 })();
